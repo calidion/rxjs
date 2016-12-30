@@ -2,7 +2,7 @@
 
 **JavaScript的ReactiveX库**
 
-这个项目是对[Reactive-Extensions/RxJS](https://github.com/Reactive-Extensions/RxJS)的重写，当这个项目完成时就会取代它。 这个版本的目标是更好的性能，更好的模块化，更好的对堆栈进行调试，同时又能保持最佳的向后兼容性，虽然会有一些因为API删减造成的不兼容的。
+这个项目是对[Reactive-Extensions/RxJS](https://github.com/Reactive-Extensions/RxJS)的重写，当这个项目完成时就会取代它。 这个版本的目标是更好的性能，更好的模块化，更好的对堆栈进行调试，同时又能保持最佳的向后兼容性，虽然会有一些因为API删减造成的不兼容。
 
 ### [» 安装](./manual/installation.html)
 *如何通过npm或CDN安装RxJs*
