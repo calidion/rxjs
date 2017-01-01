@@ -4,8 +4,7 @@
 npm install rxjs-es
 ```
 
-导入整个核心功能模快
-
+导入整个核心功能模块
 ```js
 import Rx from 'rxjs/Rx';
 
