@@ -11,7 +11,7 @@ RxJS用于解决异步事件的管理问题，它的核心概念如下：
 - **Observable:** 代表数据与事件的集合，这个集合可以被调用，从而可以生成数据和事件。
 - **Observer:** 回调函数的集合，用于获取想要数据。这些数据来自于Observable。
 - **Subscription:** 用于表示Observable的执行状态，主要用于执行的取消。
-- **Operators:** 函数式风格的纯函数，通过`map`, `filter`, `concat`, `flatMap`等操作对集合进行处理。
+- **Operator:** 函数式风格的纯函数，通过`map`, `filter`, `concat`, `flatMap`等操作对集合进行处理。
 - **Subject:** 与EventEmitter等价，唯一可以将一个值或者事件向个多个Observer进行广播的办法。
 - **Schedulers:** 一个中心化的、控制并发的分发器，允许我们可以在象`setTimeout`、`requestAnimationFrame`或者其它类似的计算中可以进行调整。
 

@@ -1,13 +1,18 @@
-# Observable
+# 可观察对象(Observable)
 
-Observables are lazy Push collections of multiple values. They fill the missing spot in the following table:
+可观察对象(Observable)们是一种对多次值的非即时推送技术。他们将下面的表格填补完成了。
 
-| | Single | Multiple |
+| | 单次数值(Single) | 多次数值(Multiple) |
 | --- | --- | --- |
 | **Pull** | [`Function`](https://developer.mozilla.org/en-US/docs/Glossary/Function) | [Iterator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols) |
-| **Push** | [`Promise`](https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/Promise.jsm/Promise) | [`Observable`](../class/es6/Observable.js~Observable.html) |
+| **Push** | [`Promise`](https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/Promise.jsm/Promise) | **[`Observable`](../class/es6/Observable.js~Observable.html)** |
 
-**Example.** The following is an Observable that pushes the values `1`, `2`, `3` immediately (synchronously) when subscribed, and the value `4` after one second has passed since the subscribe call, then completes:
+> 译者注：如果没有Observable那么，右下角是一个空白区域。所以理论还是很重要的:)
+
+**示例**
+
+下面是一个可观察对象(Observable)在被订阅后，将`1`, `2`, `3`立即（同步）推送出去，而1秒钟后再传入`4`，并且结束的代码：
+
 
 ```js
 var observable = Rx.Observable.create(function (observer) {
@@ -21,7 +26,7 @@ var observable = Rx.Observable.create(function (observer) {
 });
 ```
 
-To invoke the Observable and see these values, we need to *subscribe* to it:
+为了对这个可观察对象(Observable)进行调用，我们需要*订阅(subscribe)*它。
 
 ```js
 var observable = Rx.Observable.create(function (observer) {
@@ -43,7 +48,7 @@ observable.subscribe({
 console.log('just after subscribe');
 ```
 
-Which executes as such on the console:
+在`console`执行的效果是这样的：
 
 ```none
 just before subscribe
@@ -55,40 +60,49 @@ got value 4
 done
 ```
 
-## Pull versus Push
+## Pull VS Push
 
-*Pull* and *Push* are two different protocols how a data *Producer* can communicate with a data *Consumer*.
+*Pull*和*Push*是两个不同的协议，但是它们都是关于一个数据的*生产者*与数据的*消费者*如何通讯的协议。
 
-**What is Pull?** In Pull systems, the Consumer determines when it receives data from the data Producer. The Producer itself is unaware of when the data will be delivered to the Consumer.
+**Pull是什么？**
 
-Every JavaScript Function is a Pull system. The function is a Producer of data, and the code that calls the function is consuming it by "pulling" out a *single* return value from its call.
+在Pull的系统里，消费者决定什么时候接收生产者的数据。而生产者自身并不关心数据什么时候发送给消费者。
 
-ES2015 introduced [generator functions and iterators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) (`function*`), another type of Pull system. Code that calls `iterator.next()` is the Consumer, "pulling" out *multiple* values from the iterator (the Producer).
+所有的JavaScript函数都是一个Pull系统。函数是一个数据的生产者，而代码调用函数其实就是一个通过调用来"Pull"出一个*单个* 数据的消费过程。
+
+ES2015引入了[生成器(generator)函数和迭代器(iterator)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*)(`function*`),另一个Pull系统。调用`iterator.next()`的代码其实就是消费者，从迭代器（生产者）中"Pull"出一个*多个*数值。
 
 
-| | Producer | Consumer |
+**Push是什么？**
+
+在Push的系统里，生产者决定什么时候发送数据给消息者。而消费者自身并不关心数据什么时候发送过来。
+
+许诺器(Promise)是现在JavaScript里最常见的Push类型。一个许诺器(Promise)(生产者)发送一个解决的结果给注册的回调函数（消费者）。但是与函数不同的是，许诺器（Promies）决定着什么时候将数据”Push"到回调函数。
+
+
+| | 生产者（Producer） | 消费者（Consumer） |
 | --- | --- | --- |
-| **Pull** | **Passive:** produces data when requested. | **Active:** decides when data is requested. |
-| **Push** | **Active:** produces data at its own pace. | **Passive:** reacts to received data. |
+| **Pull** | **被动（Passive）:** 请求是生成数据。 | **主动（Active）:** 决定数据什么时候请求。 |
+| **Push** | **主动（Active）:** 按自己的节奏生成数据。 | **被动（Passive）:** 对接收到的数据作出反应。 |
 
-**What is Push?** In Push systems, the Producer determines when to send data to the Consumer. The Consumer is unaware of when it will receive that data.
 
-Promises are the most common type of Push system in JavaScript today. A Promise (the Producer) delivers a resolved value to registered callbacks (the Consumers), but unlike functions, it is the Promise which is in charge of determining precisely when that value is "pushed" to the callbacks.
+RxJS引入了可观察对象(Observable)，一个新的JavaScript上的Push系统。一个可观察对象(Observable)是一个多值的生产者，然后能将多值同时推送给观察者(Observer)(Consumers)。
 
-RxJS introduces Observables, a new Push system for JavaScript. An Observable is a Producer of multiple values, "pushing" them to Observers (Consumers).
+- 一个**函数（Function）**是一个懒运算，它在调用后同步返回一个值。
+- 一个**生成器（generator）**是一个懒运算，它通过迭代可以返回0次或者无限（理论上）个值。
+- 一个**许诺器(Promise)**是一个运算，它可能会（也可能不会）最终返回一个值。
+- 一个**可观察者（Observable）**是一个懒运算，它可以同步，也可以异步的返回0次或者无限（理论上）个值，而值的产生方式是由对它的调用产生。
 
-- A **Function** is a lazily evaluated computation that synchronously returns a single value on invocation.
-- A **generator** is a lazily evaluated computation that synchronously returns zero to (potentially) infinite values on iteration.
-- A **Promise** is a computation that may (or may not) eventually return a single value.
-- An **Observable** is a lazily evaluated computation that can synchronously or asynchronously return zero to (potentially) infinite values from the time it's invoked onwards.
+> 懒运算(lazy computation)，是指被动调用的一种运算，即Call-by-value，当有数据需求时再调用。
+> 急运算(eager evaluation), 是指不管是不是能处理都会被调用，即Call-by-need。
 
-## Observables as generalizations of functions
+## 可观察者（Observable）是一种对函数的泛化
 
-Contrary to popular claims, Observables are not like EventEmitters nor are they like Promises for multiple values. Observables *may act* like EventEmitters in some cases, namely when they are multicasted using RxJS Subjects, but usually they don't act like EventEmitters.
+与流行的说法不同的时，可观察者（Observable）即不是多值化的EventEmitter也不是多值化的许诺器(Promise)。可观察者（Observable）在一些场景，比如在使用RxJS的Subject对象并且被多播（multicast）时，*可能行为上*有点象是EventEmitter，，但是通常它们并不象EventEmmiter。
 
-<span class="informal">Observables are like functions with zero arguments, but generalize those to allow multiple values.</span>
+<span class="informal">可观察者（Observable）象是没有参数的函数，但是将参数泛化并允许多个参数。 </span>
 
-Consider the following:
+可以看下下面的代码：
 
 ```js
 function foo() {
@@ -102,7 +116,7 @@ var y = foo.call(); // same as foo()
 console.log(y);
 ```
 
-We expect to see as output:
+我们可以看到预期的输出：
 
 ```none
 "Hello"
@@ -111,7 +125,7 @@ We expect to see as output:
 42
 ```
 
-You can write the same behavior above, but with Observables:
+我们也可以用可观察者（Observable）写出与上面结果完全相同的代码：
 
 ```js
 var foo = Rx.Observable.create(function (observer) {
@@ -127,8 +141,7 @@ foo.subscribe(function (y) {
 });
 ```
 
-And the output is the same:
-
+结果完全相同：
 ```none
 "Hello"
 42
@@ -136,11 +149,11 @@ And the output is the same:
 42
 ```
 
-This happens because both functions and Observables are lazy computations. If you don't call the function, the `console.log('Hello')` won't happen. Also with Observables, if you don't "call" it (with `subscribe`), the `console.log('Hello')` won't happen. Plus, "calling" or "subscribing" is an isolated operation: two function calls trigger two separate side effects, and two Observable subscribes trigger two separate side effects. As opposed to EventEmitters which share the side effects and have eager execution regardless of the existence of subscribers, Observables have no shared execution and are lazy.
+这种情况发生的原因是因为函数与可观察者（Observable）都是懒运算。如果你不调用函数，`console.log('Hello')`就不会发生。而对于可观察者（Observable）来说，如果你不"调用"(通过`subscribe`)它，`console.log('Hello')`也不会发生。还有“调用”或者“订阅”是一种隔离的操作：两个函数函数调用触发两个不同的影响，而两个不同的可观察者（Observable）订阅触发另外两个不同的影响。而EventEmitter刚好相反，它是分享影响的，并且是一种急(Eager)执行，它并不关心是不是有订阅者（即任何时候都会广播)。而可观察者（Observable）并不会分享执行，因为他们是懒的。
 
-<span class="informal">Subscribing to an Observable is analogous to calling a Function.</span>
+<span class="informal">订阅可观察者（Observable）与调用一个函数是类似的。</span>
 
-Some people claim that Observables are asynchronous. That is not true. If you surround a function call with logs, like this:
+有些人认为可观察者（Observable）是异步的。但是并不对。如果你在一个函数调用前后围上log，象这样：
 
 <!-- skip-example -->
 ```js
@@ -149,7 +162,7 @@ console.log(foo.call());
 console.log('after');
 ```
 
-You will see the output:
+你会看到这样的结果：
 
 ```none
 "before"
@@ -158,7 +171,7 @@ You will see the output:
 "after"
 ```
 
-And this is the same behavior with Observables:
+而这与可观察者（Observable）的行为完全一样：
 
 <!-- skip-example -->
 ```js
@@ -169,7 +182,7 @@ foo.subscribe(function (x) {
 console.log('after');
 ```
 
-And the output is:
+输出结果:
 
 ```none
 "before"
@@ -178,21 +191,21 @@ And the output is:
 "after"
 ```
 
-Which proves the subscription of `foo` was entirely synchronous, just like a function.
+这证明了订阅`foo`是完全同步的，就象是一个函数。
 
-<span class="informal">Observables are able to deliver values either synchronously or asynchronously.</span>
+<span class="informal">可观察者（Observable）即可以同步，也可以异步对数据进行推送。</span>
 
-What is the difference between an Observable and a function? **Observables can "return" multiple values over time**, something which functions cannot. You can't do this:
+那么可观察者（Observable）与函数有什么不同呢？ **可观察者（Observable）可以"返回"多个值在不同的时间点上**，这是函数无法做到的。你无法这样做：
 
 ```js
 function foo() {
   console.log('Hello');
   return 42;
-  return 100; // dead code. will never happen
+  return 100; // 死的代码，永远不会被执行
 }
 ```
 
-Functions can only return one value. Observables, however, can do this:
+函数只能返回一个值。可观察者（Observable）却可以这样做：
 
 ```js
 var foo = Rx.Observable.create(function (observer) {
@@ -209,7 +222,7 @@ foo.subscribe(function (x) {
 console.log('after');
 ```
 
-With synchronous output:
+同步输出的结果：
 
 ```none
 "before"
@@ -220,7 +233,7 @@ With synchronous output:
 "after"
 ```
 
-But you can also "return" values asynchronously:
+但是你也可以异步的返回值：
 
 ```js
 var foo = Rx.Observable.create(function (observer) {
@@ -240,7 +253,7 @@ foo.subscribe(function (x) {
 console.log('after');
 ```
 
-With output:
+结果是：
 
 ```none
 "before"
@@ -252,26 +265,27 @@ With output:
 300
 ```
 
-Conclusion:
+结论:
 
-- `func.call()` means "*give me one value synchronously*"
-- `observable.subscribe()` means "*give me any amount of values, either synchronously or asynchronously*"
+- `func.call()` 表示 "*同步地给我一个值*"
+- `observable.subscribe()` 表示 "*给我任意个值，不管是同步还是异步*"
 
-## Anatomy of an Observable
+## 可观察者（Observable）剖析
 
-Observables are **created** using `Rx.Observable.create` or a creation operator, are **subscribed** to with an Observer, **execute** to deliver `next` / `error` / `complete` notifications to the Observer, and their execution may be **disposed**. These four aspects are all encoded in an Observable instance, but some of these aspects are related to other types, like Observer and Subscription.
+可观察者（Observable）使用`Rx.Observable.create`或者创建型运算子**创建**，可被一个观察者（Observer）**订阅**，然后**执行**推送`next` / `error` / `complete`等通知给观察者（Observer），并且它们的执行是可以被**消除**的。这四个功能已经在一个可观察者（Observable）实例中编码完全，但是仍有一些功能与其它的类型有关系，比如观察者（Observer）和订阅（Subscription）。
 
-Core Observable concerns:
-- **Creating** Observables
-- **Subscribing** to Observables
-- **Executing** the Observable
-- **Disposing** Observables
 
-### Creating Observables
+可观察者（Observable）关注的核心点：
+- **创建**可观察者（Observable）
+- **订阅**可观察者（Observable）
+- **执行**可观察者（Observable）
+- **消除**可观察者（Observable）
 
-`Rx.Observable.create` is an alias for the `Observable` constructor, and it takes one argument: the `subscribe` function.
+### 创建可观察者（Observable）
 
-The following example creates an Observable to emit the string `'hi'` every second to an Observer.
+`Rx.Observable.create`是`Observable`构建器(Constructor)的别名，它只接收一个参数：`subscribe`函数。
+
+下面的例子创建一个可观察者（Observable），然后每秒都发送字符`'hi'`给一个观察者（Observer）。
 
 ```js
 var observable = Rx.Observable.create(function subscribe(observer) {
@@ -281,34 +295,44 @@ var observable = Rx.Observable.create(function subscribe(observer) {
 });
 ```
 
-<span class="informal">Observables can be created with `create`, but usually we use the so-called [creation operators](./overview.html#creation-operators), like `of`, `from`, `interval`, etc.</span>
+<span class="informal">可观察者（Observable）可以通过`create`创建，但是通常我们使用所谓的［创建型运算子］(./overview.html#creation-operators)，象 `of`，`from`，`interval`等。</span>
 
-In the example above, the `subscribe` function is the most important piece to describe the Observable. Let's look at what subscribing means.
+在上面的例子里，`subscribe`函数是描述可观察者（Observable）最重要的部分。所以下面我们一起来看看订阅到底是什么。
 
-### Subscribing to Observables
 
-The Observable `observable` in the example can be *subscribed* to, like this:
+### 订阅可观察者（Observable）
+
+上面例子中的可观察者（Observable）变量`observable`可以这样被*订阅*：
 
 <!-- skip-example -->
 ```js
 observable.subscribe(x => console.log(x));
 ```
+`observable.subscribe`和在`Observable.create(function subscribe(observer) {...})`里的`subscribe`使用同一个名字不是一个巧合。对于库来说，它们是不同的；但是对于实际的目的来说，你可以认为它们在概念上是相同的。
 
-It is not a coincidence that `observable.subscribe` and `subscribe` in `Observable.create(function subscribe(observer) {...})` have the same name. In the library, they are different, but for practical purposes you can consider them conceptually equal.
+这也展示了一个可观察者（Observable）的`subscribe`调用并不会在它的多个观察者（Observer）中分享。当通过一个观察者（Observer）调用`observable.subscribe`时，`Observable.create(function subscribe(observer) {...})`里的`subscribe`只会调用这个给定的观察者（Observer）。每次调用`observable.subscribe`都只会触发给定观察者（Observer）自己独立的设置。
 
-This shows how `subscribe` calls are not shared among multiple Observers of the same Observable. When calling `observable.subscribe` with an Observer, the function `subscribe` in `Observable.create(function subscribe(observer) {...})` is run for that given Observer. Each call to `observable.subscribe` triggers its own independent setup for that given Observer.
 
-<span class="informal">Subscribing to an Observable is like calling a function, providing callbacks where the data will be delivered to.</span>
 
-This is drastically different to event handler APIs like `addEventListener` / `removeEventListener`. With `observable.subscribe`, the given Observer is not registered as a listener in the Observable. The Observable does not even maintain a list of attached Observers.
+<span class="informal">订阅一个可观察者（Observable）就象是一次函数调用，只不过提供的回调函数是数据会被推送过去的地方。</span>
 
-A `subscribe` call is simply a way to start an "Observable execution" and deliver values or events to an Observer of that execution.
+这与象`addEventListener` / `removeEventListener`这样事件处理的API是非常不同的。通过使用`observable.subscribe`，给定的观察者（Observer）并没有注册成为可观察者（Observable）的一个侦听者（listener）。而可观察者（Observable）更是连一个相关的观察者（Observer）列表都没有。
 
-### Executing Observables
+一个`subscribe`调用只是一个启动一次”可观察者（Observable）执行“的方法，然后发送值或者事件到这个执行的一个观察者（Observer）那里。
 
-The code inside `Observable.create(function subscribe(observer) {...})` represents an "Observable execution", a lazy computation that only happens for each Observer that subscribes. The execution produces multiple values over time, either synchronously or asynchronously.
 
-There are three types of values an Observable Execution can deliver:
+### 执行可观察者（Observable）
+
+在`Observable.create(function subscribe(observer) {...})`里的代码代表了一次“可观察者（Observable）执行”，一个懒计算只会在每个观察者（Observer）执行订阅时发生。这个执行随着时间的推移可以产生多个值，可以是同步也可以异步。
+
+一个可观察者（Observable）执行有三个类型可以推送：
+
+- "Next"通知: 发送一个值：包括一个数，一个字符串，一个对象等。
+- "Error"通知: 发送一个JavaScript的Error或者异常。
+- "Complete"通知:　不发送值。
+
+
+
 
 - "Next" notification: sends a value such as a Number, a String, an Object, etc.
 - "Error" notification: sends a JavaScript Error or exception.
