@@ -1,6 +1,6 @@
 # 观察者（Observer）
 
-**什么是观察者（Observer）?** 观察者（Observer）是观察对象所发送数据的消费者。观察者对象简单来说是一组回调函数,一个用于接收可观察对象（Observable）发送的`next`, `error`, 和 `complete`通知的对象。 下面是一个很典型的观察者对象的例子：
+**什么是观察者（Observer）?** 是一个接收可观察者（Observable）数据的消费者。观察者对象简单来说是一组回调函数,一个用于接收可观察对象（Observable）发送的`next`, `error`, 和 `complete`通知的对象。 下面是一个很典型的观察者对象的例子：
 
 ```js
 var observer = {
