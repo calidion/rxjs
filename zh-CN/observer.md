@@ -10,18 +10,18 @@ var observer = {
 };
 ```
 
-使用观察者（Observer）时, 只需要将它放到一个可观察者（Observable）对象的subscribe方法中即可：
+使用可观察者对象（Observable）时, 只需要将它放到一个可观察者（Observable）对象的subscribe方法中即可：
 
 <!-- skip-example -->
 ```js
 observable.subscribe(observer);
 ```
 
-<span class="informal">观察者仅仅是由三个回调函数组成的对象, 每个回调函数分别对应一种观察者对象的通知类型。</span>
+<span class="informal">可观察者对象（Observable）仅仅是由三个回调函数组成的对象, 每个回调函数分别对应一种可观察者对象（Observable）的通知类型。</span>
 
-观察者在RxJS中也可以是*不完全*的。 如果你没有提供某个回调函数,观察者（Observer）对象仍然会正常执行, 只是某些类型的通知会被忽略, 因为它们在观察者（Observer）中没有相应的回调函数。
+可观察者对象（Observable）在RxJS中也可以是*不完全*的。 如果你没有提供某个回调函数,可观察者对象（Observable）对象仍然会正常执行, 只是某些类型的通知会被忽略, 因为它们在可观察者对象（Observable）中没有相应的回调函数。
 
-下面的例子是一个没有 `complete` 回调方法的观察者对象:
+下面的例子是一个没有 `complete` 回调方法的可观察者对象（Observable）：
 
 ```js
 var observer = {
@@ -30,14 +30,14 @@ var observer = {
 };
 ```
 
-当订阅一个可观察者（Observable）对象时，你也可以只提供回调函数作为参数，而不用传入一个观察者（Observable）对象。比如这样：
+当订阅一个可观察者（Observable）对象时，你也可以只提供回调函数作为参数，而不用传入一个可观察者（Observable）对象。比如这样：
 
 <!-- skip-example -->
 ```js
 observable.subscribe(x => console.log('Observer got a next value: ' + x));
 ```
 
-这时在`observable.subscribe`方法内部，它会创建一个观察者（Observer）对象，并将第一个参数作为next的处理函数。而三种类型的回调函数都可以以参数形式传入：
+这时在`observable.subscribe`方法内部，它会创建一个可观察者（Observable）对象，并将第一个参数作为next的处理函数。而三种类型的回调函数都可以以参数形式传入：
 
 <!-- skip-example -->
 ```js
