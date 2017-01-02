@@ -21,7 +21,7 @@ observable.subscribe(observer);
 
 可观察者（Observable）对象在RxJS中也可以是*不完全*的。 如果你没有提供某个回调函数,可观察者（Observable）对象仍然会正常执行, 只是某些类型的通知会被忽略, 因为它们在可观察者（Observable）对象中没有相应的回调函数。
 
-下面的例子是一个没有 `complete` 回调方法的可观察者对象（Observable）：
+下面的例子是一个没有 `complete` 回调方法的可观察者（Observable）对象：
 
 ```js
 var observer = {
