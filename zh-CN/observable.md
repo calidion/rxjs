@@ -1,18 +1,17 @@
 # 可观察对象(Observable)
 
-可观察对象(Observable)们是一种对多次值的非即时推送技术。他们将下面的表格填补完成了。
+可观察对象(Observable)们是一种多次值的非即时推送技术。有了它们后，下面的表格就完整了。
 
 | | 单次数值(Single) | 多次数值(Multiple) |
 | --- | --- | --- |
 | **Pull** | [`Function`](https://developer.mozilla.org/en-US/docs/Glossary/Function) | [Iterator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols) |
 | **Push** | [`Promise`](https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/Promise.jsm/Promise) | **[`Observable`](../class/es6/Observable.js~Observable.html)** |
 
-> 译者注：如果没有Observable那么，右下角是一个空白区域。所以理论还是很重要的:)
+> 译者注：如果没有Observable，那么右下角是一个空白区域。所以理论还是很重要的:)
 
 **示例**
 
-下面是一个可观察对象(Observable)在被订阅后，将`1`, `2`, `3`立即（同步）推送出去，而1秒钟后再传入`4`，并且结束的代码：
-
+下面是一个可观察对象(Observable)在被订阅后，先将`1`, `2`, `3`立即（同步）推送出去，然后在1秒钟后再送出`4`，然后再推送结束信息的代码：
 
 ```js
 var observable = Rx.Observable.create(function (observer) {
