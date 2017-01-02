@@ -21,7 +21,7 @@ import 'rxjs/add/operator/map';
 Observable.of(1,2,3).map(x => x + '!!!'); // etc
 ```
 
-按需导入并与推荐的[绑定操作符](https://github.com/tc39/proposal-bind-operator)一起使用：
+按需导入并与推荐的[绑定运算子](https://github.com/tc39/proposal-bind-operator)一起使用：
 
 > 注意: 这个附加语法依赖[transpiler支持](http://babeljs.io/docs/plugins/transform-function-bind/) 并且此语法可能会被TC39完全撤销。恕不另行通知!使用风险请自行承担。
 
