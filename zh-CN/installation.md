@@ -4,14 +4,14 @@
 npm install rxjs-es
 ```
 
-导入整个核心功能模块
+导入整个核心功能模块：
 ```js
 import Rx from 'rxjs/Rx';
 
 Rx.Observable.of(1,2,3)
 ```
 
-根据需求分包导入(对打包后体积敏感的项目很有用):
+根据需求分包导入(对打包后体积敏感的项目很有用)：
 
 ```js 
 import { Observable} from 'rxjs/Observable';
@@ -21,10 +21,9 @@ import 'rxjs/add/operator/map';
 Observable.of(1,2,3).map(x => x + '!!!'); // etc
 ```
 
-按需导入并与推荐的[绑定操作符](https://github.com/tc39/proposal-bind-operator)一起使用:
+按需导入并与推荐的[绑定操作符](https://github.com/tc39/proposal-bind-operator)一起使用：
 
-> 注意: 这个附加语法依赖[transpiler 支持](http://babeljs.io/docs/plugins/transform-function-bind/) 并且此语法可能
-被TC39完全撤销，恕不另行通知! 使用风险请自行承担。
+> 注意: 这个附加语法依赖[transpiler支持](http://babeljs.io/docs/plugins/transform-function-bind/) 并且此语法可能会被TC39完全撤销。恕不另行通知!使用风险请自行承担。
 
 ```js
 import { Observable } from 'rxjs/Observable';
@@ -73,12 +72,15 @@ map.call(of(1,2,3), function (x) { return x + '!!!'; });
 ### CommonJS下使用TypeScript
 如果你在使用RxJS时，遇到类似`error TS2304: Cannot find name 'Promise'` 或者 `error TS2304: Cannot find name 'Iterable'` 的错误，
 你可能需要安装typings的一个辅助模块。
+
 1. 对于[`typings`](https://github.com/typings/typings) 用户:
 
     `typings install es6-shim --ambient`
 
-2.如果你不使用typings，此接口可以从[/es6-shim/es6-shim.d.ts](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/es6-shim/es6-shim.d.ts)复制。
+2. 如果你不使用typings，此接口可以从[/es6-shim/es6-shim.d.ts](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/es6-shim/es6-shim.d.ts)复制。
+
 3. 添加 `tsconfig.json` 或者 CLI 参数中的类型定义文件。
+
 ## 所有的模块类型 (CJS/ES6/AMD/TypeScript) 通过npm
 
 通过 [npm](https://www.npmjs.org) **version 3**安装这个库:
