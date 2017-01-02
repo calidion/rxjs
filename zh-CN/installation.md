@@ -25,6 +25,7 @@ Observable.of(1,2,3).map(x => x + '!!!'); // etc
 
 > 注意: 这个附加语法依赖[transpiler 支持](http://babeljs.io/docs/plugins/transform-function-bind/) 并且此语法可能
 被TC39完全撤销，恕不另行通知! 使用风险请自行承担。
+
 ```js
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
