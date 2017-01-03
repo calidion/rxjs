@@ -17,7 +17,7 @@ var observer = {
 observable.subscribe(observer);
 ```
 
-<span class="informal">观察者（Observable）只是由三个回调函数组成的对象, 而每个回调函数分别对应一种可观察者（Observable）的通知类型。</span>
+<span class="informal">观察者（Observer）只是由三个回调函数组成的对象, 而每个回调函数分别对应一种可观察者（Observable）的通知类型。</span>
 
 观察者（Observer）在RxJS中也可以是*不完全*的。 如果你没有提供某个类型的回调函数,可观察者（Observable）仍然会正常执行, 只是某些类型的通知会被忽略, 因为它们在观察者（Observer）中没有相应的回调函数。
 
