@@ -1,6 +1,6 @@
-# Subscription
+# 订阅(Subscription)
 
-**What is a Subscription?** A Subscription is an object that represents a disposable resource, usually the execution of an Observable. A Subscription has one important method, `unsubscribe`, that takes no argument and just disposes the resource held by the subscription. In previous versions of RxJS, Subscription was called "Disposable".
+**什么是订阅?** 订阅是一个表示可支配资源的对象, 通常表示一个可观察者对象的执行。 订阅对象有一个重要的方法, `unsubscribe`,不带参数，只是释放资源所持有的订阅。 在以往的RxJS版本中, Subscription 被称为 "Disposable"。
 
 ```js
 var observable = Rx.Observable.interval(1000);
@@ -11,9 +11,10 @@ var subscription = observable.subscribe(x => console.log(x));
 subscription.unsubscribe(); 
 ```
 
-<span class="informal">A Subscription essentially just has an `unsubscribe()` function to release resources or cancel Observable executions.</span>
+<span class="informal">订阅基本上只有一个`unsubscribe()`方法用来释放或者取消可观察者对象的执行。</span>
 
-Subscriptions can also be put together, so that a call to an `unsubscribe()` of one Subscription may unsubscribe multiple Subscriptions. You can do this by "adding" one subscription into another:
+订阅也可以放在一起，因此调用一个订阅的`unsubscribe()`方法，可以取消多个订阅。你可以通过"添加"一个订阅到另一个：
+
 
 ```js
 var observable1 = Rx.Observable.interval(400);
@@ -30,7 +31,8 @@ setTimeout(() => {
 }, 1000);
 ```
 
-When executed, we see in the console:
+执行之后，我们在控制台得到：
+
 ```none
 second: 0
 first: 0
@@ -39,4 +41,4 @@ first: 1
 second: 2
 ```
 
-Subscriptions also have a `remove(otherSubscription)` method, in order to undo the addition of a child Subscription.
+订阅也有一个`remove(其他订阅)`的方法，以便撤销自订阅。
