@@ -1,6 +1,6 @@
 # 订阅(Subscription)
 
-**什么是订阅(Subscription)?** 订阅(Subscription)是一个对象, 代表着一个可观察者对象（Observable）的执行。 订阅对象有一个重要的方法, `unsubscribe`,不带参数，只是释放资源所持有的订阅。 在以往的RxJS版本中, Subscription 被称为 "Disposable"。
+**什么是订阅(Subscription)?** 订阅(Subscription)是一个对象，代表着一个可观察者对象（Observable）的执行。 订阅（Subscription）对象有一个重要的方法, `unsubscribe`。它不带参数，只释放由当前订阅（Subscription）所持有的资源。 在以往的RxJS版本中， Subscription 被称为 "Disposable"。
 
 ```js
 var observable = Rx.Observable.interval(1000);
