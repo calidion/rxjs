@@ -1,18 +1,17 @@
 # 可观察对象(Observable)
 
-可观察对象(Observable)们是一种对多次值的非即时推送技术。他们将下面的表格填补完成了。
+可观察对象(Observable)们是一种多次值的非即时推送技术。有了它们后，下面的表格就完整了。
 
 | | 单次数值(Single) | 多次数值(Multiple) |
 | --- | --- | --- |
 | **Pull** | [`Function`](https://developer.mozilla.org/en-US/docs/Glossary/Function) | [Iterator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols) |
 | **Push** | [`Promise`](https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/Promise.jsm/Promise) | **[`Observable`](../class/es6/Observable.js~Observable.html)** |
 
-> 译者注：如果没有Observable那么，右下角是一个空白区域。所以理论还是很重要的:)
+> 译者注：如果没有Observable，那么右下角是一个空白区域。所以理论还是很重要的:)
 
 **示例**
 
-下面是一个可观察对象(Observable)在被订阅后，将`1`, `2`, `3`立即（同步）推送出去，而1秒钟后再传入`4`，并且结束的代码：
-
+下面是一个可观察对象(Observable)在被订阅后，先将`1`, `2`, `3`立即（同步）推送出去，然后在1秒钟后再送出`4`，然后再推送结束信息的代码：
 
 ```js
 var observable = Rx.Observable.create(function (observer) {
@@ -325,30 +324,24 @@ observable.subscribe(x => console.log(x));
 
 在`Observable.create(function subscribe(observer) {...})`里的代码代表了一次“可观察者（Observable）执行”，一个懒计算只会在每个观察者（Observer）执行订阅时发生。这个执行随着时间的推移可以产生多个值，可以是同步也可以异步。
 
-一个可观察者（Observable）执行有三个类型可以推送：
+一个可观察者执行（Observable Execution）有三个类型可以推送：
 
 - "Next"通知: 发送一个值：包括一个数，一个字符串，一个对象等。
 - "Error"通知: 发送一个JavaScript的Error或者异常。
 - "Complete"通知:　不发送值。
 
+Next通知是最重要也是最常见的类型：它们表示实际的数据被发送给观察者（Observer）。
+Error和Complete通知只会在可观察者执行（Observable Execution）过程中出现一次，并且两者不会同时出现。
 
-
-
-- "Next" notification: sends a value such as a Number, a String, an Object, etc.
-- "Error" notification: sends a JavaScript Error or exception.
-- "Complete" notification: does not send a value.
-
-Next notifications are the most important and most common type: they represent actual data being delivered to an Observer. Error and Complete notifications may happen only once during the Observable Execution, and there can only be either one of them.
-
-These constraints are expressed best in the so-called *Observable Grammar* or *Contract*, written as a regular expression:
+这个约束可以通过可观察者（Observable） *语法（Grammar）*或者*契约（Contract）*很好的描述，它是一个如下的正则：
 
 ```none
 next*(error|complete)?
 ```
 
-<span class="informal">In an Observable Execution, zero to infinite Next notifications may be delivered. If either an Error or Complete notification is delivered, then nothing else can be delivered afterwards.</span>
+<span class="informal">在一个可观察者执行（Observable Execution）中，0个或者无限个Next通知会被发送。但是如果一个Error或者Complete通知被发送，那么之后就不会有任何东西被发送出来了。</span>
 
-The following is an example of an Observable execution that delivers three Next notifications, then completes:
+下面是一个可观察者执行（Observable Execution）发送三次Next通知然后Complete的例子：
 
 ```js
 var observable = Rx.Observable.create(function subscribe(observer) {
@@ -359,7 +352,8 @@ var observable = Rx.Observable.create(function subscribe(observer) {
 });
 ```
 
-Observables strictly adhere to the Observable Contract, so the following code would not deliver the Next notification `4`:
+
+可观察者（Observable）严格的遵守可观察者契约（Observable Contract），所以下面的代码中的Next通知`4`不会被发送。
 
 ```js
 var observable = Rx.Observable.create(function subscribe(observer) {
@@ -367,11 +361,11 @@ var observable = Rx.Observable.create(function subscribe(observer) {
   observer.next(2);
   observer.next(3);
   observer.complete();
-  observer.next(4); // Is not delivered because it would violate the contract
+  observer.next(4); // 由于不符合契约，所以不会被发送。
 });
 ```
 
-It is a good idea to wrap any code in `subscribe` with `try`/`catch` block that will deliver an Error notification if it catches an exception:
+如果需要在`subscribe`函数里捕获错误，并发送Error消息，那把代码用`try`/`catch`包装起来应该是一个好的思路。
 
 ```js
 var observable = Rx.Observable.create(function subscribe(observer) {
@@ -381,23 +375,24 @@ var observable = Rx.Observable.create(function subscribe(observer) {
     observer.next(3);
     observer.complete();
   } catch (err) {
-    observer.error(err); // delivers an error if it caught one
+    observer.error(err); // 发送错误，如果能捕获的话
   }
 });
 ```
 
-### Disposing Observable Executions
+### 消除可观察者执行（Observable Execution）
 
-Because Observable Executions may be infinite, and it's common for an Observer to want abort execution in finite time, we need an API for canceling an execution. Since each execution is exclusive to one Observer only, once the Observer is done receiving values, it has to have a way to stop the execution, in order to avoid wasting computation power or memory resources.
+由于可观察者执行（Observable Execution）可能是无限的，一个观察者（Observer）想要在有限的时间内退出执行是很正常的事情，所以我们需要一个API用来取消执行。因为每个执行都是只对一个观察者（Observer）负责的，一旦这个观察者（Observer）完成数据接收，那么它必须要有一个方法来结束这个执行，从而避免浪费计算能力和内存资源。
 
-When `observable.subscribe` is called, the Observer gets attached to the newly created Observable execution, but also this call returns an object, the `Subscription`:
+
+当`observable.subscribe`被调用时，那么这个观察者（Observer）就与这个新创建的可观察者执行（Observable Execution）关联上了，同时这个调用会返回一个对象：`Subscription`：
 
 <!-- skip-example -->
 ```js
 var subscription = observable.subscribe(x => console.log(x));
 ```
 
-The Subscription represents the ongoing execution, and has a minimal API which allows you to cancel that execution. Read more about the [`Subscription` type here](./overview.html#subscription). With `subscription.unsubscribe()` you can cancel the ongoing execution:
+这个`Subscription`对象代表着正在进行的执行，并且有最基本的用于取消这个执行的API。了解更多关于[`Subscription`类型](./overview.html#subscription)。使用`subscription.unsubscribe()`你就可以取消正在当前的执行。
 
 ```js
 var observable = Rx.Observable.from([10, 20, 30]);
@@ -406,9 +401,12 @@ var subscription = observable.subscribe(x => console.log(x));
 subscription.unsubscribe();
 ```
 
-<span class="informal">When you subscribe, you get back a Subscription, which represents the ongoing execution. Just call `unsubscribe()` to cancel the execution.</span>
 
-Each Observable must define how to dispose resources of that execution when we create the Observable using `create()`. You can do that by returning a custom `unsubscribe` function from within `function subscribe()`.
+<span class="informal">当你订阅时，你会得到一个Subscription对象，这个对象代表着当前的执行。但需要调用`unsubscribe()`就可以取消这个执行。 </span>
+
+当我们通过`create()`创建一个可观察者（Observable）时，每个可观察者（Observable）都必须定义如何消除这个执行所拥有的资源。你可以在`函数 subscribe()`里返回一个函数作为自定义的`unsubscribe`函数，用于消除相关的资源。
+
+比如，下面的代码说明了我们清除一个由`setInterval`设定的定期执行的方法。
 
 For instance, this is how we clear an interval execution set with `setInterval`:
 
@@ -426,7 +424,7 @@ var observable = Rx.Observable.create(function subscribe(observer) {
 });
 ```
 
-Just like `observable.subscribe` resembles `Observable.create(function subscribe() {...})`, the `unsubscribe` we return from `subscribe` is conceptually equal to `subscription.unsubscribe`. In fact, if we remove the ReactiveX types surrounding these concepts, we're left with rather straightforward JavaScript.
+就象`observable.subscribe`与`Observable.create(function subscribe() {...})`很象一样，我们从`subscribe`返回的`unsubscribe`在概念上也与`subscription.unsubscribe`是一样的。如果我们将附加的ReactivX的类型从这些概念上去除，我们就可以得到更加直接的JavaScript代码。
 
 ```js
 function subscribe(observer) {
@@ -445,4 +443,4 @@ var unsubscribe = subscribe({next: (x) => console.log(x)});
 unsubscribe(); // dispose the resources
 ```
 
-The reason why we use Rx types like Observable, Observer, and Subscription is to get safety (such as the Observable Contract) and composability with Operators.
+而我们使用象Observable，Observer和Subscription这些Rx类型的原因是为了获得安全性（比如可观察者契约（Observable Contract））和让运算子可消除。
