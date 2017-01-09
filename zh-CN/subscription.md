@@ -5,9 +5,9 @@
 ```js
 var observable = Rx.Observable.interval(1000);
 var subscription = observable.subscribe(x => console.log(x));
-// Later:
-// This cancels the ongoing Observable execution which
-// was started by calling subscribe with an Observer.
+//之后：
+//这将取消正在进行中的可观察者对象（Observer）的执行，
+//这个执行是由一个观察者对象（Observer）通过订阅(subscribe )启动的。
 subscription.unsubscribe(); 
 ```
 
@@ -25,8 +25,8 @@ var childSubscription = observable2.subscribe(x => console.log('second: ' + x));
 subscription.add(childSubscription);
 
 setTimeout(() => {
-  // Unsubscribes BOTH subscription and childSubscription
-  subscription.unsubscribe();
+  // 取消两个订阅和子订阅
+  subscription.unsubscribe();
 }, 1000);
 ```
 
