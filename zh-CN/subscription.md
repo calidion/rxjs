@@ -1,6 +1,6 @@
 # 订阅(Subscription)
 
-**什么是订阅(Subscription)?** 订阅(Subscription)是一个对象，代表着一个可观察者对象（Observable）的执行。 订阅（Subscription）对象有一个重要的方法, `unsubscribe`。它不带参数，只释放由当前订阅（Subscription）所持有的资源。 在以往的RxJS版本中， Subscription 被称为 "Disposable"。
+**什么是订阅(Subscription)?** 订阅(Subscription)是一个对象，代表着一个可观察者对象（Observable）的执行。 订阅（Subscription）对象有一个重要的方法, `unsubscribe`。它不带参数，只释放由当前订阅（Subscription）所持有的资源。 在以往的RxJS版本中， 订阅（Subscription） 被称为 "可消除者（Disposable）"。
 
 ```js
 var observable = Rx.Observable.interval(1000);
@@ -11,10 +11,9 @@ var subscription = observable.subscribe(x => console.log(x));
 subscription.unsubscribe(); 
 ```
 
-<span class="informal">订阅基本上只有一个`unsubscribe()`方法用来释放或者取消可观察者对象的执行。</span>
+<span class="informal">订阅实际上只有一个`unsubscribe()`方法用来释放资源或者取消可观察者对象（Observable）的执行。</span>
 
-订阅也可以放在一起，因此调用一个订阅的`unsubscribe()`方法，可以取消多个订阅。你可以通过"添加"一个订阅到另一个：
-
+订阅（Subscription）也是可以被放在一起的，从而对一个订阅（Subscription）的`unsubscribe()`方法调用一次，就可以取消多个订阅。你可以通过"添加"一个订阅到另一个：
 
 ```js
 var observable1 = Rx.Observable.interval(400);
@@ -41,4 +40,4 @@ first: 1
 second: 2
 ```
 
-订阅也有一个`remove(其他订阅)`的方法，以便撤销自订阅。
+订阅（Subscription）也有一个`remove(otherSubscription)`的方法，用于撤销子订阅的执行。
