@@ -13,4 +13,4 @@ RxJS是一个比较有坐的新技术，所以我们翻译了相应的文档为�
 2. [介绍](./introduction.md)
 3. [可观察对象(Observable)](./observable.md)
 4. [观察者（Observer）](./observer.md)
-5. [订阅（Subscription）](./subscription)
+5. [订阅（Subscription）](./subscription.md)
