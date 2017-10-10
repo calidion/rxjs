@@ -13,7 +13,7 @@ subscription.unsubscribe();
 
 <span class="informal">订阅对象（Subscription）实际上只有一个`unsubscribe()`方法用来释放资源或者取消可观察者对象（Observable）的执行。</span>
 
-订阅对象（Subscription）也是可以被放在一起的，从而对一个订阅对象（Subscription）的`unsubscribe()`方法调用一次，就可以取消多个订阅。你可以通过"添加"一个订阅（Subscription）到另一个订阅（Subscription）做到：
+订阅对象（Subscription）也是可以被放在一起的，从而只要调用一个订阅对象（Subscription）的`unsubscribe()`方法一次，就可以取消多个订阅。你可以通过"添加"一个订阅（Subscription）到另一个订阅（Subscription）做到：
 
 ```js
 var observable1 = Rx.Observable.interval(400);
@@ -25,8 +25,8 @@ var childSubscription = observable2.subscribe(x => console.log('second: ' + x));
 subscription.add(childSubscription);
 
 setTimeout(() => {
-  // 取消两个订阅和子订阅
-  subscription.unsubscribe();
+  // 同时取消订阅和子订阅
+  subscription.unsubscribe();
 }, 1000);
 ```
 
